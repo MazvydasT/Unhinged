@@ -1,0 +1,12 @@
+#container {
+    padding: 8px;
+    height: 100%;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+::ng-deep .mat-form-field-infix {
+    width:145px !important;
+}

@@ -1,0 +1,60 @@
+<div id="container" fxLayout="row">
+    <div fxLayout="column">
+        <form [formGroup]="jointFormFroup">
+            <div *ngFor="let rowData of inputDataModel" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="8px">
+                <mat-form-field *ngFor="let axisData of rowData.data; index as i">
+                    <mat-label>{{rowData.joint}} Joint {{i === 0 ? 'X' : i === 1 ? 'Y' : 'Z'}}</mat-label>
+                    <input matInput placeholder="Ex. {{axisData.placeholder}}" type="number"
+                        [formControlName]="axisData.formControlName">
+                </mat-form-field>
+            </div>
+        </form>
+
+        <ng-container *ngIf="minMax | async as minMaxValues">
+            <div fxLayout="column">
+                <label>Bonnet opening angle ({{minMaxValues.minBonnetAngle}}° to
+                    {{minMaxValues.maxBonnetAngle}}°):</label>
+
+                <div fxLayout="row" fxLayoutGap="8px">
+                    <mat-slider fxFlex [min]="minMaxValues.minBonnetAngle" [max]="minMaxValues.maxBonnetAngle"
+                        step="0.0001" [formControl]="bonnetOpeningFormControl" [value]="bonnetOpeningFormControl.value"
+                        (input)="bonnetOpeningFormControl.setValue($event.value)">
+                    </mat-slider>
+
+                    <mat-form-field>
+                        <input class="text-align-right" matInput [min]="minMaxValues.minBonnetAngle"
+                            [max]="minMaxValues.maxBonnetAngle" step="0.0001" type="number"
+                            [formControl]="bonnetOpeningFormControl" [value]="bonnetOpeningFormControl.value">
+
+                        <span matSuffix>°</span>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxLayout="column">
+                <label>Input Joint offset angle ({{minMaxValues.minOffset}}° to {{minMaxValues.maxOffset}}°):</label>
+
+                <div fxLayout="row" fxLayoutGap="8px">
+                    <mat-slider fxFlex [min]="minMaxValues.minOffset" [max]="minMaxValues.maxOffset" step="0.01"
+                        [formControl]="inputOffsetFormControl" [value]="inputOffsetFormControl.value"
+                        (input)="inputOffsetFormControl.setValue($event.value)">
+                    </mat-slider>
+
+                    <mat-form-field>
+                        <input class="text-align-right" matInput [min]="minMaxValues.minOffset"
+                            [max]="minMaxValues.maxOffset" step="0.01" type="number"
+                            [formControl]="inputOffsetFormControl" [value]="inputOffsetFormControl.value">
+
+                        <span matSuffix>°</span>
+                    </mat-form-field>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <svg fxLayout="column" fxFlex preserveAspectRatio="xMinYMin meet" [attr.viewBox]="viewBox | async"
+        xmlns="http://www.w3.org/2000/svg">
+        <path [attr.d]="pathData | async" stroke="#b0bec5" fill="none" stroke-linejoin="round" stroke-linecap="round"
+            shape-rendering="geometricPrecision" stroke-width="2" />
+    </svg>
+</div>
